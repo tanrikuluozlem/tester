@@ -38,7 +38,7 @@ func RateLimitMiddleware(config Config, stats *RateStats) func(*fiber.Ctx) error
 
 	return func(c *fiber.Ctx) error {
 		stats.mu.Lock()
-		defer stats.mu.Unlock()	
+		defer stats.mu.Unlock()
 
 		if CheckRateLimit(limiter, 1) {
 			stats.Success++
@@ -60,9 +60,9 @@ func main() {
 
 	// Example rate limit configuration
 	config := Config{
-		Limit:  2,            // 2 events per second
-		Burst:  4,            // Allowing bursts of up to 4 events
-		Period: time.Second,   // 1 second time window
+		Limit:  2,           // 2 events per second
+		Burst:  4,           // Allowing bursts of up to 4 events
+		Period: time.Second, // 1 second time window
 	}
 
 	// Initialize rate limiting statistics
@@ -72,11 +72,6 @@ func main() {
 
 	// Apply rate limiting middleware
 	app.Use(RateLimitMiddleware(config, stats))
-
-	// Define your route
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, Fiber!")
-	})
 
 	// Start the server
 	go func() {
